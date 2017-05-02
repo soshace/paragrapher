@@ -32,11 +32,11 @@ class Application {
       }
     }));
     app.use("/api", bodyParser.json());
-    // if(this.config.env == "local") {
-    //   this.initWebpack(app);
-    // } else {
+    if(this.config.env == "local") {
+      this.initWebpack(app);
+    } else {
       app.use(webpackConfig.output.publicPath, express.static(webpackConfig.output.path));
-    // }
+    }
     router(app);
     const indexHtmlPath = path.resolve("public/index.html");
     app.get("/", function(req, res) {
