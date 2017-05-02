@@ -20,20 +20,10 @@ class ApplicationRouter extends React.Component <Props, void> {
   render() {
     return (
       <BrowserRouter key={ Math.random() }>
-        {this.renderRoutes()}
+        { <Route path="/app/documents" /> }
+        { <Route path="/app/documents/:documentId/paragraphs" /> }
+        { <Route path="/app/paragraphs/:paragraphId" /> }
       </BrowserRouter>
-    );
-  }
-
-  renderRoutes() {
-    return (
-      <div>
-        {/* <Route path="/login" component={ Login }/> */}
-        {/* <Route path="/oauth-callback" component={ OAuthCallback }/> */}
-        {/* <Route path="/complete-profile" component={ CompleteProfile } /> */}
-        {/* <Route path="/welcome" component={ Welcome } /> */}
-        {/* <Route path="/app" component={ App } /> */}
-      </div>
     );
   }
 
