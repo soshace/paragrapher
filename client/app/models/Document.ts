@@ -3,7 +3,7 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-import { Collection } from "./";
+import { ApiCollection } from "./";
 
 interface Params {
   id: string;
@@ -12,18 +12,22 @@ interface Params {
   updatedAt: number;
 }
 
-export class Document extends Collection {
+export class Document extends ApiCollection {
 
   static fields = ["id, title", "createdAt", "updatedAt"];
-  static collection = "documents";
+
+  static find(options: { limit?: number; offset?: number }) {
+    return super.find("documents", options);
+  }
 
   id: string;
   title: string;
   createdAt: number;
   updatedAt: number;
 
+
   constructor(params: Params) {
-    super(params);
+    super();
     this.id = params.id;
     this.title = params.title;
     this.createdAt = params.createdAt;

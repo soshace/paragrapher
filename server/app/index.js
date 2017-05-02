@@ -42,7 +42,8 @@ class Application {
     app.get("/", function(req, res) {
       res.redirect("/app");
     });
-    app.get("/app/*", function(req, res) {
+    app.get(/\/app.*/, function(req, res) {
+      console.log("hr");
       res.sendFile(indexHtmlPath);
     });
     return this.connectToDb()

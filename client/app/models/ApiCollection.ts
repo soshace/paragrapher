@@ -5,13 +5,12 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-export class Collection {
+export class ApiCollection {
 
-  static collection: string;
   static fields: string[];
 
-  static find(limit?: number, offset?: number) {
-    axios.get(this.collection, { params: { limit, offset } })
+  static find(url: string, options: { limit?: number; offset?: number }) {
+    return axios.get(`/api/${url}`, { params: options })
     .then((result) => {
       console.log(result);
     });

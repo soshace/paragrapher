@@ -39,14 +39,14 @@ function errorHandler(state: State, action: { payload: Error }): State {
   return { list };
 }
 
-function saveHandler(model: string, state: State, action: { payload: Error }) {
+function saveHandler(model: string, state: State) {
   const notification: Notification = { level: "info", message: `${model.toLowerCase()} was saved` };
   const list = [ ...state.list ];
   list.push(notification);
   return { list };
 }
 
-export function notificationsReducer(state = defaultState, action) {
+export function notificationsReducer(state = defaultState, action: { type: string; payload: Error }) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 };

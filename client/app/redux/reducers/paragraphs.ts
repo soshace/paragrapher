@@ -1,45 +1,48 @@
 "use strict";
 
 import {
-  GEOLOCATION,
   READ,
   SAVE,
   START,
+  PARAGRAPHS,
+  PARAGRAPH,
   SUCCESS,
   FAIL,
   join
 } from "../constants";
-import { Place } from "../../models";
+import { Paragraph, Action } from "../../models";
 
 export interface State {
+  list: Paragraph[];
   loading: boolean;
-  place: Place;
-  message?: string;
-}
+};
 
 export const defaultState: State = {
-  loading: false,
-  place: null
+  list: [],
+  loading: true
 };
 
 const ACTION_HANDLERS = {
 
-  [join(READ, GEOLOCATION, START)]: function(state, action) {
-    return ({ ...state, loading: true, message: "Getting your geo location..." });
+  [join(READ, PARAGRAPHS, START)]: function(state: State, action: Action<Paragraph[]>): State {
+    return { loading: true, list: [] };
   },
 
-  [join(READ, GEOLOCATION, SUCCESS)]: function(state, action) {
-    return ({ ...state, loading: false, place: action.payload });
+  [join(READ, PARAGRAPHS, SUCCESS)]: function(state: State, action: Action<Paragraph[]>): State {
+    const list = action.payload.map(function(paragraph) {
+      return paragraph.toJSON();
+    });
+    return { loading: false, list };
   },
 
-  [join(READ, GEOLOCATION, FAIL)]: function(state, action) {
-    return ({ ...state, loading: false, place: null });
+  [join(READ, PARAGRAPHS, FAIL)]: function(state: State, action: Action<Error>): State {
+    return { ...state, loading: false };
   }
 
 };
 
-export function geolocationReducer(state = defaultState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+export function paragraphsReducer(state: State = defaultState, action: Action<Paragraph[] | Error>): State {
+  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state
+  return handler ? handler(state, action) : state;
 };

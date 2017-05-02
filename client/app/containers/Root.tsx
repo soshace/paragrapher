@@ -3,14 +3,10 @@
 import * as React from "react";
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
-import Uranium from "uranium";
+import { Grid } from "react-bootstrap";
+
 
 import { Router } from "./";
-
-const style = {
-  height: "100%",
-  width: "100%"
-};
 
 class Root extends React.Component<any, any> {
 
@@ -19,10 +15,10 @@ class Root extends React.Component<any, any> {
 
     return (
       <Provider store={ this.props.store }>
-        <div css={ style }>
-          <Router history={ this.props.history } />
+        <Grid>
+          <Router />
           <DevTools />
-        </div>
+        </Grid>
       </Provider>
     );
   }
@@ -33,9 +29,9 @@ class Root extends React.Component<any, any> {
     } else {
       return (
         <Provider store={ this.props.store }>
-          <div css={ style }>
-            <Router history={ this.props.history } />
-          </div>
+          <Grid>
+            <Router />
+          </Grid>
         </Provider>
       );
     }
@@ -43,4 +39,4 @@ class Root extends React.Component<any, any> {
 
 }
 
-export default Uranium(Root);
+export default Root;

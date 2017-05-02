@@ -1,33 +1,29 @@
 "use strict";
 
+import { createBrowserHistory } from "history";
 import { LOCATION_CHANGE, EMPTY_EVENT } from "../constants";
+import { Dispatch } from "redux";
+import { Location } from "../../models";
 
-let history: any;
+const browserHistory = createBrowserHistory();
 
-export function changeLocation(location: string, replace?: boolean) {
-  if(!history) {
-    throw new Error("History wrapper isn't initiated");
-  }
+export function changeLocation(url: string, replace?: boolean) {
   if(replace) {
-    history.replace(location);
+    browserHistory.replace(url);
   } else {
-    history.push(location);
+    browserHistory.push(url);
   }
   return { type: "EMPTY_EVENT" };
 };
 
 export function back() {
-  if(!history) {
-    throw new Error("History wrapper isn't initiated");
-  }
-  history.goBack();
+  browserHistory.goBack();
   return { type: EMPTY_EVENT };
 };
 
-export function init(_history) {
-  return function(dispatch) {
-    history = _history;
-    history.listen(function(location, action) {
+export function init() {
+  return function(dispatch: Dispatch<{}>) {
+    browserHistory.listen(function(location: Location) {
       dispatch({ type: LOCATION_CHANGE, location });
     });
   };

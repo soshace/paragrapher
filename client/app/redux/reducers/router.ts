@@ -1,15 +1,16 @@
 "use strict";
 
-import { LOCATION_CHANGE, LOGOUT, SUCCESS, join } from "../constants";
+import { LOCATION_CHANGE, SUCCESS, join } from "../constants";
+
+import { Location } from "../../models"
 
 export interface State {
-  location: {
-    pathname: string;
-    state?: any;
-    search: string;
-    hash: string;
-    key: string;
-  };
+  location: Location;
+}
+
+interface Action {
+  location: Location;
+  type: string;
 }
 
 export const defaultState: State = {
@@ -22,13 +23,13 @@ export const defaultState: State = {
 };
 
 const ACTION_HANDLERS = {
-  [LOCATION_CHANGE]: function(state, action) {
+  [LOCATION_CHANGE]: function(state: State, action: Action) {
     return { ...state, location: action.location };
   }
 
 };
 
-export function routerReducer(state = defaultState, action) {
+export function routerReducer(state = defaultState, action: Action) {
   const handler = ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 };

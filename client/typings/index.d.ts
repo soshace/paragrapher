@@ -1,8 +1,18 @@
 declare var CONFIG: {
 };
 
-declare var memoryHistory: {
-  readonly push: {
-    (location: string): void;
+// interface HotCallback {
+//   (): void;
+// }
+
+// interface HotNodeModule {
+//   hot: {
+//     accept(path: string, callback: HotCallback): void
+//   };
+// }
+
+declare var process: {
+  env: {
+    NODE_ENV: string;
   }
-}l
+};
