@@ -15,7 +15,7 @@ class Root extends React.Component<any, any> {
 
     return (
       <Provider store={ this.props.store }>
-        <Grid>
+        <Grid fluid>
           <Router />
           <DevTools />
         </Grid>
