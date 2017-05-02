@@ -2,8 +2,8 @@
 
 import express from "express";
 
-import { handleRoute } from "./helpers";
-import { ParagraphsController } from "../../app/controllers";
+import { handleRoute } from "../helpers";
+import { ParagraphsController } from "../../../app/controllers";
 
 export default function() {
   const paragraphsRouter = express.Router();
