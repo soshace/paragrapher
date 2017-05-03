@@ -1,0 +1,30 @@
+@import (css) "~normalize.css";
+
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+.modal-enter {
+  opacity: 0.01;
+}
+
+.modal-enter.modal-enter-active {
+  opacity: 1;
+  transition: opacity 200ms ease-in;
+}
+
+.modal-leave {
+  opacity: 1;
+}
+
+.modal-leave.modal-leave-active {
+  opacity: 0.01;
+  transition: opacity 100ms ease-in;
+}
+
+.youtube-player {
+  // border-top-left-radius: 5px;
+  // border-top-right-radius: 5px;
+}

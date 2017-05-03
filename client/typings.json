@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "index": "file:./client/typings/index.d.ts"
+  }
+}

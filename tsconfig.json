@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./public/build/",
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react",
+    "typeRoots" : ["node_modules/@types", "./client/typings/index.d.ts"]
+  },
+  "include": [
+    "./client/**/*"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "useBabel": true,
+    "useCache": true,
+    "babelOptions": {
+      "presets": ["react", "es2015", "stage-0"]
+    },
+    "ignoreDiagnostics": [
+      7016,
+      2339,
+      2346,
+      2349
+    ]
+  }
+}
