@@ -38,8 +38,6 @@ const ACTION_HANDLERS = {
 
   [join(READ, DOCUMENTS, SUCCESS)]: function(state: State, action: Action<Document[]>): State {
     const list = action.payload.map(function(document) {
-      console.log(document);
-      console.log(document.toJSON());
       return document.toJSON();
     })
     return { ...state, loading: false, list };
@@ -53,8 +51,10 @@ const ACTION_HANDLERS = {
     return { ...state, form: { saving: true } };
   },
 
-  [join(SAVE, DOCUMENT, SUCCESS)]: function(state: State, action: Action<Document[]>): State {
-    return { ...state, form: { saving: false } };
+  [join(SAVE, DOCUMENT, SUCCESS)]: function(state: State, action: Action<Document>): State {
+    const list = [ ...state.list ];
+    list.push(action.payload.toJSON());
+    return { ...state, list, form: { saving: false } };
   },
 
   [join(SAVE, DOCUMENT, FAIL)]: function(state: State, action: Action<Error>): State {

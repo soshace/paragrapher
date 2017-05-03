@@ -1,5 +1,5 @@
 "use strict";
 
 import DocumentsList from "./List";
-
-export { DocumentsList };
+import NewDocument from "./New";
+export { DocumentsList, NewDocument };

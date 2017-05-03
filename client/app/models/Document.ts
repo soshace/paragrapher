@@ -42,8 +42,4 @@ export class Document extends ApiCollection {
     this.updatedAt = params.updatedAt;
   }
 
-  save() {
-    return super.save("documents");
-  }
-
 };

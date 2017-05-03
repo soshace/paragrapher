@@ -8,6 +8,7 @@ import { Row, Col } from "react-bootstrap";
 import { readDocuments } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
 import { Document } from "../../../models";
+import { NewDocument } from "../";
 import "./style.less";
 
 interface Props {
@@ -25,6 +26,7 @@ class DocumentsList extends React.Component <Props, void> {
   render() {
     return (
       <Row>
+        <NewDocument />
         { this.renderMain() }
       </Row>
     );
