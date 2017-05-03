@@ -1,2 +1,6 @@
 {
+  "webpack": {
+    "outputUrl": "/build/",
+    "outputPath": "public/build"
+  }
 }

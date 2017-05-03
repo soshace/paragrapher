@@ -9,18 +9,16 @@ import mongoose from "mongoose";
 
 import packageJson from "../../package.json";
 import Logger from "./modules/logger";
-import configureWebpack from "../../client/webpack.config";
 import router from "./routers";
 import "./models";
 
 let config;
-let webpackConfig;
 
 class Application {
 
   static init(_config) {
     config = _config;
-    webpackConfig = configureWebpack(this.config.env);
+
     global.logger = new Logger(this.name, console);
     const app = express();
     morgan.token("req-body", function (req, res) {
@@ -35,7 +33,7 @@ class Application {
     if(this.config.env == "local") {
       this.initWebpack(app);
     } else {
-      app.use(webpackConfig.output.publicPath, express.static(webpackConfig.output.path));
+      app.use(config.webpack.outputUrl, express.static(config.webpack.outputPath));
     }
     router(app);
     const indexHtmlPath = path.resolve("public/index.html");
@@ -52,6 +50,8 @@ class Application {
   }
 
   static initWebpack(app) {
+    const configureWebpack = require("../../client/webpack.config");
+    const webpackConfig = configureWebpack(this.config.env);
     const webpack = require("webpack");
     const compiler = webpack(webpackConfig);
     app.use(require("webpack-dev-middleware")(compiler, {
