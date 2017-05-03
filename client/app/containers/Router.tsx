@@ -4,7 +4,7 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
-import { DocumentsList } from "./";
+import { DocumentsList, ParagraphsList } from "./";
 import { init as initHistoryWrapper } from "../redux/actions/RouterActions";
 
 interface Props {
@@ -21,8 +21,8 @@ class ApplicationRouter extends React.Component <Props, void> {
     return (
       <BrowserRouter key={ Math.random() }>
         <Switch>
-          <Route path="/app/documents" component={ DocumentsList } />
-          <Route path="/app/documents/:documentId/paragraphs" />
+          <Route exact path="/app/documents" component={ DocumentsList } />
+          <Route path="/app/documents/:documentId/paragraphs" component={ ParagraphsList } />
           <Route path="/app/paragraphs/:paragraphId" />
           <Route>
             <Redirect to="/app/documents" />

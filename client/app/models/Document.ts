@@ -9,8 +9,8 @@ interface Params {
   _id?: string;
   id?: string;
   title: string;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export class Document extends ApiCollection {
@@ -30,16 +30,11 @@ export class Document extends ApiCollection {
 
   id: string;
   title: string;
-  createdAt: number;
-  updatedAt: number;
-
 
   constructor(params: Params) {
     super(params);
     this.id = params._id || params.id;
     this.title = params.title;
-    this.createdAt = params.createdAt;
-    this.updatedAt = params.updatedAt;
   }
 
 };
