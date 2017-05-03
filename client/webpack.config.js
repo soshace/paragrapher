@@ -49,9 +49,9 @@ module.exports = function(env) {
     },
     output: {
       filename: "[name].js",
-      path: path.resolve("public/build"),
+      path: path.resolve(config.webpack.outputPath),
       sourceMapFilename: "[file].map",
-      publicPath: "/build/"
+      publicPath: config.webpack.outputUrl
     },
     resolve: {
       extensions: [".jsx", ".ts", ".tsx", ".js"]
