@@ -52,7 +52,7 @@ class ParagraphsList extends React.Component <Props, void> {
         this.moveToParagraph(paragraphs[ i - 1 ]);
         break;
       case "ArrowDown":
-        this.moveToParagraph(this.paragraphRefs[paragraphs[ i + 1 ].id]);
+        this.moveToParagraph(paragraphs[ i + 1 ]);
         break;
       case "ArrowLeft":
         this.toggleParagraphLike(paragraphs[i], false);
@@ -72,6 +72,9 @@ class ParagraphsList extends React.Component <Props, void> {
   }
 
   moveToParagraph(paragraph: Paragraph) {
+    if(!paragraph) {
+      return;
+    }
     const { documentId } = this.props.match.params;
     this.props.changeLocation(`/app/documents/${documentId}/paragraphs#${paragraph.id}`);
   }
@@ -102,19 +105,21 @@ class ParagraphsList extends React.Component <Props, void> {
             paragraphs.map((paragraph, i) => {
               return (
                 <Row key={ paragraph.id } className="paragraph-wrapper">
-                  <Swipeable onSwiped={ (e: any, deltaX: number) => this.swipe(paragraph, deltaX) } >
-                    <div
-                      id={ paragraph.id }
-                      tabIndex={ i }
-                      onKeyDown={ this.onKeyDown.bind(this, i) }
-                      ref={ (row: HTMLDivElement) => { this.paragraphRefs[paragraph.id] = row; } }
-                      className="paragraph"
+                  <div
+                    tabIndex={ i }
+                    id={ paragraph.id }
+                    onKeyDown={ this.onKeyDown.bind(this, i) }
+                    ref={ (row: HTMLDivElement) => { this.paragraphRefs[paragraph.id] = row; } }
+                    className="paragraph"
+                  >
+                    <Link
+                      to={ `/app/documents/${documentId}/paragraphs#${paragraph.id}` }
                     >
-                      <Link to={ `/app/documents/${documentId}/paragraphs#${paragraph.id}` }>
+                      <Swipeable onSwiped={ (e: any, deltaX: number) => this.swipe(paragraph, deltaX) } >
                         { paragraph.text }
-                      </Link>
-                    </div>
-                  </Swipeable>
+                      </Swipeable>
+                    </Link>
+                  </div>
                   <div className={ paragraph.scored ? "scored" : "" }>
                     Score: { paragraph.score }
                   </div>
