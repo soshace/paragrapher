@@ -27,6 +27,7 @@ class ParagraphsController extends ApplicationController {
   }
 
   update() {
+    const { id } = this.req.params;
     const Paragraph = mongoose.model("Paragraph");
     if(!("like" in this.req.body)) {
       res.status(403).json(new Error("Parameter like is missed"));
@@ -34,12 +35,12 @@ class ParagraphsController extends ApplicationController {
     }
     const { like } = this.req.body;
 
-    Paragraph.findOne(id)
+    Paragraph.findById(id)
     .then((paragraph) => {
       paragraph.score += like ? 1 : -1;
       return paragraph.save();
     })
-    .then(() => {
+    .then((paragraph) => {
       this.res.json(paragraph);
     })
     .catch((err) => {

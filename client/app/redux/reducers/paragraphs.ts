@@ -37,6 +37,17 @@ const ACTION_HANDLERS = {
 
   [join(READ, PARAGRAPHS, FAIL)]: function(state: State, action: Action<Error>): State {
     return { ...state, loading: false };
+  },
+
+  [join(SAVE, PARAGRAPH, SUCCESS)]: function(state: State, action: Action<Paragraph>): State {
+    const list = state.list.map(function(paragraph) {
+      if(paragraph.id == action.payload.id) {
+        return action.payload.toJSON();
+      } else {
+        return paragraph;
+      }
+    });
+    return { loading: false, list };
   }
 
 };

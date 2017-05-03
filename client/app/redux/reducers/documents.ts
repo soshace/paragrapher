@@ -40,6 +40,9 @@ const ACTION_HANDLERS = {
     const list = action.payload.map(function(document) {
       return document.toJSON();
     })
+    .sort(function(documentA, documentB) {
+      return documentA.createdAt < documentB.createdAt ? 1 : -1;
+    });
     return { ...state, loading: false, list };
   },
 
@@ -53,7 +56,7 @@ const ACTION_HANDLERS = {
 
   [join(SAVE, DOCUMENT, SUCCESS)]: function(state: State, action: Action<Document>): State {
     const list = [ ...state.list ];
-    list.push(action.payload.toJSON());
+    list.unshift(action.payload.toJSON());
     return { ...state, list, form: { saving: false } };
   },
 

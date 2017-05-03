@@ -1,12 +1,21 @@
 .paragraphs-list {
   padding-top: 50px;
   text-align: center;
+  width: 100%;
 
-  .paragraph {
-    border: 1px solid grey;
-    margin-bottom: 10px;
-    &:focus {
-      background-color: grey;
+  .paragraph-wrapper {
+    .paragraph {
+      border: 1px solid grey;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      word-wrap: break-word;
+      padding: 5px;
+      &:focus {
+        background-color: grey;
+      }
+    }
+    .scored {
+      color: red;
     }
   }
 

@@ -4,8 +4,9 @@ import * as React from "react";
 import { connect } from "react-redux";
 import { Link, Route } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
+import * as Swipeable from "react-swipeable";
 
-import { readParagraphs, changeLocation } from "../../../redux/actions";
+import { readParagraphs, changeLocation, toggleParagraphLike } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
 import { Paragraph } from "../../../models";
 import {  } from "../";
@@ -17,7 +18,7 @@ interface Props {
   match: { params: { documentId: string } };
   paragraphId?: string;
   readParagraphs(documentId: string, options: { limit?: number, offset?: number }): void;
-  changeParagraphScore(paragraph: Paragraph, like: boolean): void;
+  toggleParagraphLike(paragraph: Paragraph, like: boolean): void;
   changeLocation(url: string): void;
 }
 
@@ -54,16 +55,20 @@ class ParagraphsList extends React.Component <Props, void> {
         this.moveToParagraph(this.paragraphRefs[paragraphs[ i + 1 ].id]);
         break;
       case "ArrowLeft":
-        this.changeParagraphScore(paragraphs[i], true);
+        this.toggleParagraphLike(paragraphs[i], false);
         break;
       case "ArrowRight":
-        this.changeParagraphScore(paragraphs[i], false);
+        this.toggleParagraphLike(paragraphs[i], true);
         break;
     }
   }
 
-  changeParagraphScore(paragraph: Paragraph, like: boolean) {
+  swipe = (paragraph: Paragraph, deltaX: number) => {
+    this.props.toggleParagraphLike(paragraph, deltaX > 0);
+  }
 
+  toggleParagraphLike(paragraph: Paragraph, like: boolean) {
+    this.props.toggleParagraphLike(paragraph, like);
   }
 
   moveToParagraph(paragraph: Paragraph) {
@@ -89,24 +94,29 @@ class ParagraphsList extends React.Component <Props, void> {
       <Row className="paragraphs-list">
         <Col xs={ 3 }>
           <Link to="/app/documents">
-            Back
+            Back to documents
           </Link>
         </Col>
         <Col xs={ 6 }>
           {
             paragraphs.map((paragraph, i) => {
               return (
-                <Row key={ paragraph.id }>
-                  <div
-                    id={ paragraph.id }
-                    tabIndex={ i }
-                    onKeyDown={ this.onKeyDown.bind(this, i) }
-                    ref={ (row: HTMLDivElement) => {this.paragraphRefs[paragraph.id] = row; } }
-                    className="paragraph"
-                  >
-                    <Link to={ `/app/documents/${documentId}/paragraphs#${paragraph.id}` }>
-                      { paragraph.text }
-                    </Link>
+                <Row key={ paragraph.id } className="paragraph-wrapper">
+                  <Swipeable onSwiped={ (e: any, deltaX: number) => this.swipe(paragraph, deltaX) } >
+                    <div
+                      id={ paragraph.id }
+                      tabIndex={ i }
+                      onKeyDown={ this.onKeyDown.bind(this, i) }
+                      ref={ (row: HTMLDivElement) => { this.paragraphRefs[paragraph.id] = row; } }
+                      className="paragraph"
+                    >
+                      <Link to={ `/app/documents/${documentId}/paragraphs#${paragraph.id}` }>
+                        { paragraph.text }
+                      </Link>
+                    </div>
+                  </Swipeable>
+                  <div className={ paragraph.scored ? "scored" : "" }>
+                    Score: { paragraph.score }
                   </div>
                 </Row>
               );
@@ -128,5 +138,5 @@ function mapStateToProps({ paragraphs, router }: ReduxState) {
   }
   return result;
 }
-const mapDispatchToProps = { changeLocation, readParagraphs };
+const mapDispatchToProps = { changeLocation, readParagraphs, toggleParagraphLike };
 export default connect(mapStateToProps, mapDispatchToProps)(ParagraphsList);
