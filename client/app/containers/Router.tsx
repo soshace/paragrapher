@@ -2,24 +2,33 @@
 
 import * as React from "react";
 import { connect } from "react-redux";
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import { Router, Route, Redirect, Switch } from "react-router-dom";
+import { History } from "history";
+import { createBrowserHistory } from "history";
 
 import { DocumentsList, ParagraphsList } from "./";
 import { init as initHistoryWrapper } from "../redux/actions/RouterActions";
 
 interface Props {
-  initHistoryWrapper(): void;
+  initHistoryWrapper(history: History): void;
 }
 
 class ApplicationRouter extends React.Component <Props, void> {
 
+  history: History;
+
+  constructor(props: Props) {
+    super(props);
+    this.history = createBrowserHistory();
+  }
+
   componentDidMount() {
-    this.props.initHistoryWrapper();
+    this.props.initHistoryWrapper(this.history);
   }
 
   render() {
     return (
-      <BrowserRouter key={ Math.random() }>
+      <Router key={ Math.random() } history={ this.history } >
         <Switch>
           <Route exact path="/app/documents" component={ DocumentsList } />
           <Route path="/app/documents/:documentId/paragraphs" component={ ParagraphsList } />
@@ -28,7 +37,7 @@ class ApplicationRouter extends React.Component <Props, void> {
             <Redirect to="/app/documents" />
           </Route>
         </Switch>
-      </BrowserRouter>
+      </Router>
     );
   }
 

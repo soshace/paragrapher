@@ -15,9 +15,9 @@ interface Action {
 
 export const defaultState: State = {
   location: {
-    pathname: "/",
-    search: "",
-    hash: "",
+    pathname: location.pathname,
+    search: location.search,
+    hash: location.hash,
     key: ""
   }
 };

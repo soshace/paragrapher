@@ -5,7 +5,6 @@ import { Store } from "redux";
 import { Provider } from "react-redux";
 import { Grid } from "react-bootstrap";
 
-
 import { Router } from "./";
 import { ReduxState } from "../redux/reducers";
 
