@@ -6,7 +6,8 @@ import axios from "axios";
 import { ApiCollection } from "./";
 
 interface Params {
-  _id: string;
+  _id?: string;
+  id?: string;
   title: string;
   createdAt: number;
   updatedAt: number;
@@ -28,10 +29,14 @@ export class Document extends ApiCollection {
 
   constructor(params: Params) {
     super(params);
-    this.id = params._id;
+    this.id = params._id || params.id;
     this.title = params.title;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;
+  }
+
+  save() {
+    return super.save("documents");
   }
 
 };
