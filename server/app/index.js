@@ -43,7 +43,6 @@ class Application {
       res.redirect("/app");
     });
     app.get(/\/app.*/, function(req, res) {
-      console.log("hr");
       res.sendFile(indexHtmlPath);
     });
     return this.connectToDb()

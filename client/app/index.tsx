@@ -23,8 +23,8 @@ if(process.env.NODE_ENV == "local" && module.hot) {
 }
 
 function renderDebug() {
-  const AppContainer = require("react-hot-loader").AppContainer;
   const Root = require("./containers/Root").default;
+  const AppContainer = require("react-hot-loader").AppContainer;
   render(
     <AppContainer>
       <Root store={ store } />

@@ -38,6 +38,8 @@ const ACTION_HANDLERS = {
 
   [join(READ, DOCUMENTS, SUCCESS)]: function(state: State, action: Action<Document[]>): State {
     const list = action.payload.map(function(document) {
+      console.log(document);
+      console.log(document.toJSON());
       return document.toJSON();
     })
     return { ...state, loading: false, list };

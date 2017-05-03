@@ -9,15 +9,21 @@ export class ApiCollection {
 
   static fields: string[];
 
+  constructor(params: any) {
+
+  }
+
   static find(url: string, options: { limit?: number; offset?: number }) {
     return axios.get(`/api/${url}`, { params: options })
-    .then((result) => {
-      console.log(result);
+    .then(({ data }: { data: any[]}) => {
+      return data.map((instance) => {
+        return new (<typeof ApiCollection>this.prototype.constructor)(instance);
+      });
     });
   }
 
   toJSON() {
-    return pick(this, this.constructor.fields);
+    return pick(this, (<typeof ApiCollection>this.constructor).fields);
   }
 
 };

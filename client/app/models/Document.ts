@@ -6,7 +6,7 @@ import axios from "axios";
 import { ApiCollection } from "./";
 
 interface Params {
-  id: string;
+  _id: string;
   title: string;
   createdAt: number;
   updatedAt: number;
@@ -14,7 +14,7 @@ interface Params {
 
 export class Document extends ApiCollection {
 
-  static fields = ["id, title", "createdAt", "updatedAt"];
+  static fields = ["id", "title", "createdAt", "updatedAt"];
 
   static find(options: { limit?: number; offset?: number }) {
     return super.find("documents", options);
@@ -27,8 +27,8 @@ export class Document extends ApiCollection {
 
 
   constructor(params: Params) {
-    super();
-    this.id = params.id;
+    super(params);
+    this.id = params._id;
     this.title = params.title;
     this.createdAt = params.createdAt;
     this.updatedAt = params.updatedAt;

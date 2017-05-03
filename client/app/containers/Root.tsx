@@ -1,14 +1,19 @@
 "use strict";
 
 import * as React from "react";
-import { createStore, combineReducers } from "redux";
+import { Store } from "redux";
 import { Provider } from "react-redux";
 import { Grid } from "react-bootstrap";
 
 
 import { Router } from "./";
+import { ReduxState } from "../redux/reducers";
 
-class Root extends React.Component<any, any> {
+interface Props {
+  store: Store<ReduxState>
+}
+
+class Root extends React.Component<Props, void> {
 
   renderDebug() {
     const  DevTools = require("./DevTools").getDevTools();
@@ -26,15 +31,14 @@ class Root extends React.Component<any, any> {
   render() {
     if(process.env.NODE_ENV == "local") {
       return this.renderDebug();
-    } else {
-      return (
-        <Provider store={ this.props.store }>
-          <Grid>
-            <Router />
-          </Grid>
-        </Provider>
-      );
     }
+    return (
+      <Provider store={ this.props.store }>
+        <Grid fluid>
+          <Router />
+        </Grid>
+      </Provider>
+    );
   }
 
 }

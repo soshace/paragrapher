@@ -2,9 +2,9 @@
 
 import * as React from "react";
 import { connect } from "react-redux";
-import { BrowserRouter, Route } from "react-router-dom";
-import {
-} from "./";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+
+import { DocumentsList } from "./";
 import { init as initHistoryWrapper } from "../redux/actions/RouterActions";
 
 interface Props {
@@ -20,9 +20,14 @@ class ApplicationRouter extends React.Component <Props, void> {
   render() {
     return (
       <BrowserRouter key={ Math.random() }>
-        { <Route path="/app/documents" /> }
-        { <Route path="/app/documents/:documentId/paragraphs" /> }
-        { <Route path="/app/paragraphs/:paragraphId" /> }
+        <Switch>
+          <Route path="/app/documents" component={ DocumentsList } />
+          <Route path="/app/documents/:documentId/paragraphs" />
+          <Route path="/app/paragraphs/:paragraphId" />
+          <Route>
+            <Redirect to="/app/documents" />
+          </Route>
+        </Switch>
       </BrowserRouter>
     );
   }

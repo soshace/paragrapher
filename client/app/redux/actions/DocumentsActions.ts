@@ -7,8 +7,8 @@ import {
   DOCUMENT,
   join
 } from "../constants";
-import {  } from "../../models";
+import { Document } from "../../models";
 
-export function readDocuments(limit: number, offsset: number) {
-  return { type: join(READ, DOCUMENTS) };
+export function readDocuments(options: { limit?: number, offsset? : number }) {
+  return { type: join(READ, DOCUMENTS), payload: Document.find(options) };
 };
