@@ -21,6 +21,13 @@ export class Document extends ApiCollection {
     return super.find("documents", options);
   }
 
+  static create(text: string) {
+    return axios.post("/api/documents", { text })
+    .then(({ data }: { data: Params}) => {
+      return new Document(data);
+    });
+  }
+
   id: string;
   title: string;
   createdAt: number;

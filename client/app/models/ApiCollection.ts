@@ -26,11 +26,4 @@ export class ApiCollection {
     return pick(this, (<typeof ApiCollection>this.constructor).fields);
   }
 
-  save(url: string) {
-    return axios.post(`/api/${url}`, this.toJSON())
-    .then(({ data }: { data: any}) => {
-      return new (<typeof ApiCollection>this.constructor)(data);
-    });
-  }
-
 };

@@ -13,7 +13,6 @@ export function readDocuments(options: { limit?: number, offsset? : number }) {
   return { type: join(READ, DOCUMENTS), payload: Document.find(options) };
 };
 
-export function createDocument(document: Document) {
-  document = new Document(document);
-  return { type: join(SAVE, DOCUMENT), payload: document.save() };
+export function createDocument(text: string) {
+  return { type: join(SAVE, DOCUMENT), payload: Document.create(text) };
 };
