@@ -33,13 +33,8 @@ module.exports = function(env) {
     env = process.env.NODE_ENV || "local";
   }
   let plugins = [
-    new webpack.DefinePlugin({
-      CONFIG: config.toString(),
-      "process.env.NODE_ENV": JSON.stringify(env)
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor']
-    })
+    new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify(env) }),
+    new webpack.optimize.CommonsChunkPlugin({ name: ['vendor'] })
   ];
   let tsConfigPath;
   if(env == "local") {

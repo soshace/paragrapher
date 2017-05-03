@@ -1,3 +1,10 @@
 {
-  "PORT": 3000
+  "PORT": 3000,
+  "database": {
+    "user": "heroku_4k1hg3gs",
+    "password": "kchms7l5us5chg2mth87lmpgln",
+    "host": "ds029381.mlab.com",
+    "port": "29381",
+    "name": "heroku_4k1hg3gs"
+  }
 }
