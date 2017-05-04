@@ -1,9 +1,11 @@
 "use strict";
 
 import {
+  CURRENT_USER,
   DOCUMENT,
   PARAGRAPH,
   NOTIFICATION,
+  READ,
   SAVE,
   SUCCESS,
   FAIL,
@@ -24,11 +26,10 @@ const ACTION_HANDLERS: any = {
   }
 };
 
-const models = [ DOCUMENT, PARAGRAPH ];
-models.forEach(function(type) {
-  ACTION_HANDLERS[join(SAVE, type, FAIL)] = errorHandler;
+[ CURRENT_USER ].forEach(function(type) {
+  ACTION_HANDLERS[join(READ, type, FAIL)] = errorHandler;
 });
-models.forEach(function(type) {
+[ DOCUMENT, PARAGRAPH ].forEach(function(type) {
   ACTION_HANDLERS[join(SAVE, type, FAIL)] = saveHandler.bind(type);
 });
 

@@ -1,5 +1,6 @@
 "use strict";
 
+export * from "./CurrentUser";
 export * from "./ApiCollection";
 export * from "./Document";
 export * from "./Paragraph"

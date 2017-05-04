@@ -1,4 +1,5 @@
 "use strict";
 
-export {
-};
+import FieldGroup from "./FieldGroup";
+
+export { FieldGroup };

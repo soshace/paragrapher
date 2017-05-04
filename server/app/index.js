@@ -35,12 +35,12 @@ class Application {
     } else {
       app.use(config.webpack.outputUrl, express.static(config.webpack.outputPath));
     }
-    router(app);
+    // router(app);
     const indexHtmlPath = path.resolve("public/index.html");
-    app.get("/", function(req, res) {
-      res.redirect("/app");
-    });
-    app.get(/\/app.*/, function(req, res) {
+    // app.get("/", function(req, res) {
+    //   res.redirect("/app");
+    // });
+    app.get(/\/.*/, function(req, res) {
       res.sendFile(indexHtmlPath);
     });
     return this.connectToDb()

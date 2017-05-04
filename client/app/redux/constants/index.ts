@@ -6,6 +6,7 @@ export * from "./Resource";
 export * from "./Notifications";
 export * from "./Documents";
 export * from "./Paragraphs";
+export * from "./CurrentUser";
 
 export const EMPTY_EVENT = "EMPTY_EVENT";
 
