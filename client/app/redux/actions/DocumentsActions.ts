@@ -9,7 +9,7 @@ import {
 } from "../constants";
 import { Document } from "../../models";
 
-export function readDocuments(options: { limit?: number, offsset? : number }) {
+export function readDocuments(options: { page?: number }) {
   return { type: join(READ, DOCUMENTS), payload: Document.find(options) };
 };
 

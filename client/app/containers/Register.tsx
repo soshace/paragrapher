@@ -85,6 +85,7 @@ class Register extends React.Component <Props, State> {
           <FormControl
             componentClass="input"
             value={ email }
+            type="email"
             placeholder="Enter email"
             onChange={ this.onEmailChange }
           />
@@ -111,6 +112,7 @@ class Register extends React.Component <Props, State> {
           <FormControl
             componentClass="input"
             value={ password }
+            type="password"
             placeholder="Enter password"
             onChange={ this.onPasswordChange }
           />

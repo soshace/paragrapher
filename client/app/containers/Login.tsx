@@ -97,6 +97,7 @@ class Login extends React.Component <Props, State> {
         >
           <FormControl
             componentClass="input"
+            type="password"
             value={ password }
             placeholder="Enter password"
             onChange={ this.onPasswordChange }

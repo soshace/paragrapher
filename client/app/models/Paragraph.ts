@@ -3,51 +3,46 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-import { ApiCollection } from "./";
+import { ApiCollection, Params as ApiCollectionParams } from "./";
 
-interface Params {
-  id?: string;
-  _id?: string;
-  text: string;
-  score: number;
-  createdAt: Date;
-  updatedAt: Date;
+interface Choice { text: string }
+
+interface Params extends ApiCollectionParams {
+  slug: string;
+  question: string;
+  my_vote: Choice[];
+  choices: Choice[];
 }
 
 export class Paragraph extends ApiCollection {
 
-  static fields = ["id", "text", "score", "createdAt", "updatedAt", "scored"];
+  static fields = ["id", "question", "score", "created_at", "modified_at", "scored"];
 
-  static find(documentId: string, options: { limit?: number; offset?: number }) {
-    return super.find(`documents/${documentId}/paragraphs`, options);
+  static find(documentId: string, options: { page?: number }) {
+    options = { ...options, in_collections__parent: documentId };
+    return super.find("questions", options);
   }
 
-  id: string;
-  text: string;
-  score: number;
-  scored: boolean;
+  slug: string;
+  question: string;
+  my_vote: Choice[];
+  choices: Choice[];
 
   constructor(params: Params) {
     super(params);
-    this.id = params.id || params._id;
-    this.text = params.text;
-    this.score = params.score;
-    try {
-      this.scored = JSON.parse(localStorage[this.id]);
-    } catch(e) {
-      this.scored = false;
-    }
+    this.slug = params.slug;
+    this.question = params.question;
+    this.my_vote = params.my_vote;
+    this.choices = params.choices;
+
   }
 
   toggleLike(like: boolean) {
-    if(this.scored) {
-      return Promise.resolve(this);
-    }
-    localStorage[this.id] = true;
-    return axios.put(`/api/paragraphs/${this.id}`, { like })
-    .then(({ data }: { data: Params}) => {
-      return new Paragraph(data);
-    });
+    // localStorage[this.id] = true;
+    // return axios.put(`/api/paragraphs/${this.id}`, { like })
+    // .then(({ data }: { data: Params}) => {
+    //   return new Paragraph(data);
+    // });
   }
 
 };

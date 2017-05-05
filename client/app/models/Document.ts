@@ -3,22 +3,19 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-import { ApiCollection } from "./";
+import { ApiCollection, Params as ApiCollectionParams } from "./";
 
-interface Params {
-  _id?: string;
-  id?: string;
-  title: string;
-  createdAt: Date;
-  updatedAt: Date;
+interface Params extends ApiCollectionParams {
+  desc: string;
+  questions_link: string;
 }
 
 export class Document extends ApiCollection {
 
-  static fields = ["id", "title", "createdAt", "updatedAt"];
+  static fields = ["id", "desc", "created_at", "modified_at", "questions_link"];
 
-  static find(options: { limit?: number; offset?: number }) {
-    return super.find("documents", options);
+  static find(options: { page?: number }) {
+    return super.find("question_collections", options);
   }
 
   static create(text: string) {
@@ -28,13 +25,13 @@ export class Document extends ApiCollection {
     });
   }
 
-  id: string;
-  title: string;
+  desc: string;
+  questions_link: string;
 
   constructor(params: Params) {
     super(params);
-    this.id = params._id || params.id;
-    this.title = params.title;
+    this.desc = params.desc;
+    this.questions_link = params.questions_link;
   }
 
 };

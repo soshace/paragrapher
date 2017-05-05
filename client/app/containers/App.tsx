@@ -11,6 +11,7 @@ import { ReduxState } from "../redux/reducers";
 
 interface Props {
   currentUser: CurrentUser;
+  pathname: string;
 }
 
 class App extends React.Component <Props, void> {
@@ -31,9 +32,10 @@ class App extends React.Component <Props, void> {
 }
 
 
-function mapStateToProps({ currentUser }: ReduxState) {
+function mapStateToProps({ currentUser, router }: ReduxState) {
   const { profile } = currentUser;
-  return { currentUser: profile };
+  const { pathname } = router.location;
+  return { currentUser: profile, pathname };
 }
 
 

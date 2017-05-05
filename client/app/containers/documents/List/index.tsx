@@ -3,7 +3,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Pagination } from "react-bootstrap";
 
 import { readDocuments } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
@@ -12,9 +12,11 @@ import { NewDocument } from "../";
 import "./style.less";
 
 interface Props {
-  readDocuments({ offset, limit }: { offset?: number; limit?: number; }): void;
+  readDocuments(options: { page?: number }): void;
   documents: Document[];
   loading: boolean;
+  currentPage: number;
+  pagesCount: number;
 }
 
 class DocumentsList extends React.Component <Props, void> {
@@ -27,9 +29,15 @@ class DocumentsList extends React.Component <Props, void> {
     return (
       <Row>
         <NewDocument />
-        { this.renderMain() }
+        <Col xs={ 6 } xsOffset={ 3 } className="documents-list">
+          { this.renderMain() }
+        </Col>
       </Row>
     );
+  }
+
+  changePage = (eventKey: any) => {
+    this.props.readDocuments({ page: eventKey });
   }
 
   renderMain() {
@@ -38,26 +46,48 @@ class DocumentsList extends React.Component <Props, void> {
       return "Loading...";
     }
     return (
-      <Col xs={ 6 } xsOffset={ 3 }>
+      <div className="documents-list" >
         {
-          documents.map(function(document) {
+          documents.map(function(document: Document) {
             return (
               <Row  key={ document.id } className="document" >
                 <Link to={ `/app/documents/${document.id}/paragraphs` }>
-                  { document.title }
+                  { document.desc }
                 </Link>
               </Row>
             );
           })
         }
-      </Col>
+        { this.renderPager() }
+      </div>
+    );
+  }
+
+  renderPager() {
+    const { pagesCount, currentPage } = this.props;
+    if(!(pagesCount > 0)) {
+      return (<div></div>);
+    }
+    return (
+      <Pagination
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        items={ pagesCount }
+        maxButtons={ 5 }
+        activePage={ currentPage }
+        onSelect={ this.changePage }
+      />
     );
   }
 
 }
 
 function mapStateToProps({ documents }: ReduxState) {
-  const { list, loading } = documents;
-  return { documents: list, loading };
+  const { list, loading, currentPage, pagesCount } = documents;
+  return { documents: list, loading, currentPage, pagesCount };
 }
 export default connect(mapStateToProps, { readDocuments })(DocumentsList);
