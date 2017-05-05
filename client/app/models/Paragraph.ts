@@ -3,7 +3,7 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-import { ApiCollection, Params as ApiCollectionParams } from "./";
+import { ApiCollection, Params as ApiCollectionParams, CurrentUser } from "./";
 
 interface Choice { text: string }
 
@@ -16,11 +16,22 @@ interface Params extends ApiCollectionParams {
 
 export class Paragraph extends ApiCollection {
 
-  static fields = ["id", "question", "score", "created_at", "modified_at", "scored"];
+  static baseUrl = "questions";
+  static fields = ["id", "question", "choices", "my_vote", "created_at", "modified_at", "slug"];
 
   static find(documentId: string, options: { page?: number }) {
     options = { ...options, in_collections__parent: documentId };
-    return super.find("questions", options);
+    return super._find(options);
+  }
+
+  static create(question: string, user: CurrentUser) {
+    const tags: any[] = [];
+    const body = { question, tags };
+    return super.create(body, user)
+  }
+
+  static tryToCreateParagraph() {
+
   }
 
   slug: string;
@@ -34,7 +45,9 @@ export class Paragraph extends ApiCollection {
     this.question = params.question;
     this.my_vote = params.my_vote;
     this.choices = params.choices;
-
+    if(!params.choices) {
+      params.choices = [{ text: "like" }, { text: "dislike" }];
+    }
   }
 
   toggleLike(like: boolean) {

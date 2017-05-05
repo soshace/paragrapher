@@ -52,7 +52,7 @@ class DocumentsList extends React.Component <Props, void> {
             return (
               <Row  key={ document.id } className="document" >
                 <Link to={ `/app/documents/${document.id}/paragraphs` }>
-                  { document.desc }
+                  { document.name }
                 </Link>
               </Row>
             );

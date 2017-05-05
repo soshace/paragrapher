@@ -7,3 +7,4 @@ export * from "./Paragraph"
 export * from "./Notification";
 export * from "./Location";
 export * from "./Action";
+export * from "./Page";

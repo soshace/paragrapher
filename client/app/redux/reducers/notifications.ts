@@ -30,7 +30,7 @@ const ACTION_HANDLERS: any = {
   ACTION_HANDLERS[join(READ, type, FAIL)] = errorHandler;
 });
 [ DOCUMENT, PARAGRAPH ].forEach(function(type) {
-  ACTION_HANDLERS[join(SAVE, type, FAIL)] = saveHandler.bind(type);
+  ACTION_HANDLERS[join(SAVE, type, FAIL)] = saveHandler.bind(null, type);
 });
 
 function errorHandler(state: State, action: { payload: Error }): State {

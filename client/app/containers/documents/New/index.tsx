@@ -7,12 +7,13 @@ import { Row, Col, FormGroup, FormControl, Button } from "react-bootstrap";
 
 import { createDocument } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
-import { Document } from "../../../models";
+import { Document, CurrentUser } from "../../../models";
 import "./style.less";
 
 interface Props {
-  createDocument(text: string): void;
+  createDocument(text: string, user: CurrentUser): void;
   loading: boolean;
+  currentUser: CurrentUser;
 }
 
 interface State {
@@ -39,10 +40,11 @@ class NewDocument extends React.Component <Props, State> {
 
   save = (event: React.TouchEventHandler<HTMLButtonElement>) => {
     const { text } = this.state;
+    const { currentUser } = this.props;
     if(text == "") {
       this.setState({ valid: false });
     } else {
-      this.props.createDocument(text);
+      this.props.createDocument(text, currentUser);
       this.setState({ text: "" });
     }
   }
@@ -85,8 +87,9 @@ class NewDocument extends React.Component <Props, State> {
 
 }
 
-function mapStateToProps({ documents }: ReduxState) {
+function mapStateToProps({ documents, currentUser }: ReduxState) {
   const { saving } = documents.form;
-  return { loading: saving };
+  const { profile } = currentUser;
+  return { loading: saving, currentUser: profile };
 }
 export default connect(mapStateToProps, { createDocument })(NewDocument);

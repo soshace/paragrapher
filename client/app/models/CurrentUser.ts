@@ -6,6 +6,7 @@ import { pick } from "underscore";
 interface Params {
   email: string;
   username: string;
+  password?: string;
   id: number;
   first_name: string;
   last_name: string;
@@ -33,6 +34,8 @@ export class CurrentUser {
   static login(username: string, password: string) {
     return axios.post(`${CONFIG.backendUri}/auth/login/`, { username, password })
     .then(function({ data }) {
+      data.password = password;
+      data.username = username;
       return new CurrentUser(data);
     });
   }
@@ -57,7 +60,7 @@ export class CurrentUser {
     });
   }
 
-  static fields = [ "id", "email", "username", "location", "address", "gender", "dob", "photo", "bio" ];
+  static fields = [ "id", "email", "username", "password", "location", "address", "gender", "dob", "photo", "bio" ];
 
   id: number;
   email: string;
@@ -74,6 +77,7 @@ export class CurrentUser {
   photo: string;
   bio: string;
   authToken: string;
+  password: string;
 
   constructor(params: Params) {
     this.id = params.id;
@@ -88,6 +92,7 @@ export class CurrentUser {
     this.photo = params.photo;
     this.bio = params.bio;
     this.authToken = params.auth_token;
+    this.password = params.password;
   }
 
   toJSON() {

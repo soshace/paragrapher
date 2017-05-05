@@ -3,34 +3,57 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-import { ApiCollection, Params as ApiCollectionParams } from "./";
+import { ApiCollection, Params as ApiCollectionParams, CurrentUser, Paragraph } from "./";
 
 interface Params extends ApiCollectionParams {
-  desc: string;
+  name: string;
   questions_link: string;
 }
 
 export class Document extends ApiCollection {
 
-  static fields = ["id", "desc", "created_at", "modified_at", "questions_link"];
+  static baseUrl = "question_collections";
+  static collectionItemsUrl = "question_collection_items";
+  static fields = ["id", "name", "created_at", "modified_at", "questions_link"];
 
   static find(options: { page?: number }) {
-    return super.find("question_collections", options);
+    return super._find(options);
   }
 
-  static create(text: string) {
-    return axios.post("/api/documents", { text })
-    .then(({ data }: { data: Params}) => {
-      return new Document(data);
+  static create(text: string, user: CurrentUser) {
+    const paragraphTexts = text.split(/[\n\r]{2,}/g);
+    const name = text.substr(0, 50);
+    const body = { name, question_count: paragraphTexts.length };
+    let document: Document;
+    return super.create(body, user)
+    .then((_document: Document) => {
+      document = _document;
+      const promises = paragraphTexts.map(function(paragraphText) {
+        return Paragraph.create(paragraphText.trim(), user);
+      });
+      return Promise.all(promises);
+    })
+    .then(function(paragraphs: Paragraph[]) {
+      const promises = paragraphs.map(function(paragraph) {
+        const { username, password } = user;
+        const config = { auth: { username, password } };
+        const content_object: any = null;
+        const item = { parent: document.id, content_object, type: "Q", object_id: paragraph.id };
+        return axios.post(`${CONFIG.backendUri}/api/${Document.collectionItemsUrl}/`, item, config);
+      });
+      return Promise.all(promises);
+    })
+    .then(function() {
+      return document;
     });
   }
 
-  desc: string;
+  name: string;
   questions_link: string;
 
   constructor(params: Params) {
     super(params);
-    this.desc = params.desc;
+    this.name = params.name;
     this.questions_link = params.questions_link;
   }
 

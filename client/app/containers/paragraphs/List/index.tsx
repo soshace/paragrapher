@@ -102,7 +102,7 @@ class ParagraphsList extends React.Component <Props, void> {
         </Col>
         <Col xs={ 6 }>
           {
-            paragraphs.map((paragraph, i) => {
+            paragraphs.map((paragraph: Paragraph, i) => {
               return (
                 <Row key={ paragraph.id } className="paragraph-wrapper">
                   <div
@@ -116,7 +116,7 @@ class ParagraphsList extends React.Component <Props, void> {
                       to={ `/app/documents/${documentId}/paragraphs#${paragraph.id}` }
                     >
                       <Swipeable onSwiped={ (e: any, deltaX: number) => this.swipe(paragraph, deltaX) } >
-                        { paragraph.text }
+                        { paragraph.question }
                       </Swipeable>
                     </Link>
                   </div>
