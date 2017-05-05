@@ -20,23 +20,22 @@ export class Document extends ApiCollection {
     return super._find(options);
   }
 
-  static create(text: string, user: CurrentUser) {
+  static create(text: string) {
     const paragraphTexts = text.split(/[\n\r]{2,}/g);
     const name = text.substr(0, 50);
     const body = { name, question_count: paragraphTexts.length };
     let document: Document;
-    return super.create(body, user)
+    return super.create(body)
     .then((_document: Document) => {
       document = _document;
       const promises = paragraphTexts.map(function(paragraphText) {
-        return Paragraph.create(paragraphText.trim(), user);
+        return Paragraph.create(paragraphText.trim());
       });
       return Promise.all(promises);
     })
     .then(function(paragraphs: Paragraph[]) {
       const promises = paragraphs.map(function(paragraph) {
-        const { username, password } = user;
-        const config = { auth: { username, password } };
+        const config = { headers: CurrentUser.getAuthHeader() };
         const content_object: any = null;
         const item = { parent: document.id, content_object, type: "Q", object_id: paragraph.id };
         return axios.post(`${CONFIG.backendUri}/api/${Document.collectionItemsUrl}/`, item, config);

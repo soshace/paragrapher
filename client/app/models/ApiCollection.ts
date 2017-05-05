@@ -26,9 +26,8 @@ export class ApiCollection {
     this.modified_at = params.modified_at;
   }
 
-  static create(body: any, user: CurrentUser) {
-    const { username, password } = user;
-    const config = { auth: { username, password } };
+  static create(body: any) {
+    const config = { headers: CurrentUser.getAuthHeader() };
     return axios.post(`${CONFIG.backendUri}/api/${this.baseUrl}/`, body, config)
     .then(({ data }: { data: Params}) => {
       return new (<typeof ApiCollection>this.prototype.constructor)(data);

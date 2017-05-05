@@ -11,51 +11,48 @@ interface Params extends ApiCollectionParams {
   slug: string;
   question: string;
   my_vote: Choice[];
-  choices: Choice[];
+  votes: Choice[];
 }
 
 export class Paragraph extends ApiCollection {
 
   static baseUrl = "questions";
-  static fields = ["id", "question", "choices", "my_vote", "created_at", "modified_at", "slug"];
+  static fields = ["id", "question", "votes", "my_vote", "created_at", "modified_at", "slug"];
 
   static find(documentId: string, options: { page?: number }) {
     options = { ...options, in_collections__parent: documentId };
     return super._find(options);
   }
 
-  static create(question: string, user: CurrentUser) {
+  static create(question: string) {
     const tags: any[] = [];
     const body = { question, tags };
-    return super.create(body, user)
-  }
-
-  static tryToCreateParagraph() {
-
+    return super.create(body)
   }
 
   slug: string;
   question: string;
   my_vote: Choice[];
-  choices: Choice[];
+  votes: Choice[];
 
   constructor(params: Params) {
     super(params);
     this.slug = params.slug;
     this.question = params.question;
     this.my_vote = params.my_vote;
-    this.choices = params.choices;
-    if(!params.choices) {
-      params.choices = [{ text: "like" }, { text: "dislike" }];
+    this.votes = params.votes;
+    if(!params.votes) {
+      params.votes = [{ text: "like" }, { text: "dislike" }];
     }
   }
 
   toggleLike(like: boolean) {
-    // localStorage[this.id] = true;
-    // return axios.put(`/api/paragraphs/${this.id}`, { like })
-    // .then(({ data }: { data: Params}) => {
-    //   return new Paragraph(data);
-    // });
+    const body = { value: like ? 5 : 1, object_id: this.id };
+    const config = { headers: CurrentUser.getAuthHeader() };
+    return axios.put(`/api/paragraphs/${this.id}`, body, config)
+    .then(({ data }: { data: Params}) => {
+      return new Paragraph(data);
+    });
   }
 
 };

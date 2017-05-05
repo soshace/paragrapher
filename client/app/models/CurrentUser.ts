@@ -6,7 +6,6 @@ import { pick } from "underscore";
 interface Params {
   email: string;
   username: string;
-  password?: string;
   id: number;
   first_name: string;
   last_name: string;
@@ -34,15 +33,17 @@ export class CurrentUser {
   static login(username: string, password: string) {
     return axios.post(`${CONFIG.backendUri}/auth/login/`, { username, password })
     .then(function({ data }) {
-      data.password = password;
-      data.username = username;
+      localStorage.setItem("auth_token", data.auth_token);
       return new CurrentUser(data);
     });
   }
 
   static get() {
-    return axios.get(`${CONFIG.backendUri}/auth/me/`)
+    const config = { headers: CurrentUser.getAuthHeader() };
+    console.log(config);
+    return axios.get(`${CONFIG.backendUri}/auth/me/`, config)
     .then(function({ data }) {
+      console.log(data);
       return new CurrentUser(data);
     })
     .catch(function(err) {
@@ -58,6 +59,11 @@ export class CurrentUser {
       }
       return result;
     });
+  }
+
+  static getAuthHeader() {
+    const authToken = localStorage.getItem("auth_token");
+    return {"Authorization": `Token ${ authToken }` };
   }
 
   static fields = [ "id", "email", "username", "password", "location", "address", "gender", "dob", "photo", "bio" ];
@@ -77,7 +83,6 @@ export class CurrentUser {
   photo: string;
   bio: string;
   authToken: string;
-  password: string;
 
   constructor(params: Params) {
     this.id = params.id;
