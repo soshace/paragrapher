@@ -15410,8 +15410,9 @@ var App = function (_React$Component) {
                 currentUser = _props.currentUser,
                 pathname = _props.pathname;
 
+            var redirectUri = pathname == "/" ? "/app/documents" : pathname;
             if (!currentUser) {
-                var path = "/login?redirect_uri=" + encodeURIComponent(pathname);
+                var path = "/login?redirect_uri=" + encodeURIComponent(redirectUri);
                 return React.createElement(react_router_dom_1.Redirect, { to: path });
             }
             return React.createElement(react_router_dom_1.Switch, null, React.createElement(react_router_dom_1.Route, { exact: true, path: "/app/documents", component: _1.DocumentsList }), React.createElement(react_router_dom_1.Route, { path: "/app/documents/:documentId/paragraphs", component: _1.ParagraphsList }));
