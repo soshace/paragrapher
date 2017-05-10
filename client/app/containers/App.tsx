@@ -17,9 +17,10 @@ interface Props {
 class App extends React.Component <Props, void> {
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, pathname } = this.props;
     if(!currentUser) {
-      return (<Redirect to="/login" />);
+      const path = `/login?redirect_uri=${encodeURIComponent(pathname)}`
+      return (<Redirect to={ path } />);
     }
     return (
       <Switch>

@@ -39,6 +39,7 @@
     "less": "^2.7.2",
     "less-loader": "^2.2.3",
     "normalize.css": "^5.0.0",
+    "query-string": "^4.3.4",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
     "react-addons-update": "^15.4.2",
@@ -82,8 +83,6 @@
     "merge": "^1.2.0",
     "mongoose": "^4.9.7",
     "morgan": "^1.8.1",
-    "mysql": "^2.13.0",
-    "orm": "^3.2.3",
     "underscore": "^1.8.3"
   }
 }

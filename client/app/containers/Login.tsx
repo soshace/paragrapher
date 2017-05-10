@@ -3,6 +3,7 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
+import { parse } from "query-string";
 import { History } from "history";
 import { createBrowserHistory } from "history";
 import { Row, Col, FormControl, Button } from "react-bootstrap";
@@ -15,6 +16,7 @@ import { CurrentUser } from "../models";
 interface Props {
   currentUser: CurrentUser;
   loading: boolean;
+  redirect: string;
   readCurrentUser(): void;
   login(username: string, password: string): void;
 }
@@ -57,9 +59,9 @@ class Login extends React.Component <Props, State> {
 
 
   render() {
-    const { currentUser } = this.props;
+    const { currentUser, redirect } = this.props;
     if(currentUser) {
-      return (<Redirect to="/app/documents" />);
+      return (<Redirect to={ redirect } />);
     } else {
       return (
         <Col xs={ 6 } xsOffset={ 3 }>
@@ -125,9 +127,11 @@ class Login extends React.Component <Props, State> {
 
 }
 
-function mapStateToProps({ currentUser }: ReduxState) {
+function mapStateToProps({ currentUser, router }: ReduxState) {
   const { loading, profile } = currentUser;
-  return { loading, currentUser: profile };
+  const search = parse(location.search);
+  const redirect = search && search.redirect_uri ? search.redirect_uri : "/app/documents";
+  return { loading, currentUser: profile, redirect };
 }
 
 export default connect(mapStateToProps, { readCurrentUser, login })(Login);
