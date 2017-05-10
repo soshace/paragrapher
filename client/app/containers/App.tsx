@@ -18,8 +18,9 @@ class App extends React.Component <Props, void> {
 
   render() {
     const { currentUser, pathname } = this.props;
+    const redirectUri = pathname == "/" ? "/app/documents" : pathname;
     if(!currentUser) {
-      const path = `/login?redirect_uri=${encodeURIComponent(pathname)}`
+      const path = `/login?redirect_uri=${encodeURIComponent(redirectUri)}`
       return (<Redirect to={ path } />);
     }
     return (
