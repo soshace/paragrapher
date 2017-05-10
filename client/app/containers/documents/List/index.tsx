@@ -7,22 +7,24 @@ import { Row, Col, Pagination } from "react-bootstrap";
 
 import { readDocuments } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
-import { Document } from "../../../models";
+import { Document, CurrentUser } from "../../../models";
 import { NewDocument } from "../";
 import "./style.less";
 
 interface Props {
-  readDocuments(options: { page?: number }): void;
+  readDocuments(user: CurrentUser, options: { page?: number }): void;
   documents: Document[];
   loading: boolean;
   currentPage: number;
   pagesCount: number;
+  currentUser: CurrentUser;
 }
 
 class DocumentsList extends React.Component <Props, void> {
 
   componentDidMount() {
-    this.props.readDocuments({});
+    const { currentUser } = this.props;
+    this.props.readDocuments(currentUser, {});
   }
 
   render() {
@@ -86,8 +88,9 @@ class DocumentsList extends React.Component <Props, void> {
 
 }
 
-function mapStateToProps({ documents }: ReduxState) {
+function mapStateToProps({ documents, currentUser }: ReduxState) {
   const { list, loading, currentPage, pagesCount } = documents;
-  return { documents: list, loading, currentPage, pagesCount };
+  const { profile } = currentUser;
+  return { documents: list, loading, currentPage, pagesCount, currentUser: profile };
 }
 export default connect(mapStateToProps, { readDocuments })(DocumentsList);

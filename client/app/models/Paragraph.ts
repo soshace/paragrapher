@@ -11,14 +11,14 @@ interface Params extends ApiCollectionParams {
   slug: string;
   question: string;
   my_vote: Choice[];
-  votes: Choice[];
+  score: number;
 }
 
 export class Paragraph extends ApiCollection {
 
   static baseUrl = "questions";
   static votesUrl = "question_votes";
-  static fields = ["id", "question", "votes", "my_vote", "created_at", "modified_at", "slug"];
+  static fields = ["id", "question", "score", "my_vote", "created_at", "modified_at", "slug"];
 
   static find(documentId: string, options: { page?: number }) {
     options = { ...options, in_collections__parent: documentId, publish: false };
@@ -31,7 +31,7 @@ export class Paragraph extends ApiCollection {
       });
       return Promise.all(promises);
     })
-    .then(function(paragraphs) {
+    .then(function(paragraphs: Paragraph[]) {
       page.list = paragraphs;
       return page;
     });
@@ -46,42 +46,43 @@ export class Paragraph extends ApiCollection {
   slug: string;
   question: string;
   my_vote: Choice[];
-  votes: Choice[];
+  score: number;
 
   constructor(params: Params) {
     super(params);
     this.slug = params.slug;
     this.question = params.question;
     this.my_vote = params.my_vote;
-    this.votes = params.votes;
-    if(!params.votes) {
-      params.votes = [{ text: "like" }, { text: "dislike" }];
+    this.score = params.score;
+    if(!params.score) {
+      this.score = 0;
     }
   }
 
   toggleLike(like: boolean) {
     const body = { value: like ? 5 : 1, object_id: this.id };
     const config = { headers: CurrentUser.getAuthHeader() };
+    if(this.my_vote.length > 0) {
+      return;
+    }
     return axios.post(`${CONFIG.backendUri}/api/${Paragraph.votesUrl}/`, body, config)
     .then(({ data }: { data: Params}) => {
-      return new Paragraph(data);
+      this.score += like ? 1 : -1;
+      return this;
     });
   }
 
   populateVotes(page?: number): any {
-    const params: any = { format: "json", object_id: this.id  };
+    const params: any = { format: "json", object: this.id  };
     if(typeof page == "number") {
       params.page = page;
     }
     return axios.get(`${CONFIG.backendUri}/api/${Paragraph.votesUrl}/`, { params })
     .then(({ data }: { data: any}) => {
-      this.votes = data.results.map(function(vote: any) {
-        if(vote.value == 5) {
-          return 1;
-        } else {
-          return 0;
-        }
-      });
+      this.score = data.results.reduce((currentValue: number, vote: any) => {
+        return currentValue + (vote.value == 5 ? 1 : -1);
+      }, 0);
+      console.log(this.score);
       if(data.next_id) {
         return this.populateVotes(data.next_id);
       }

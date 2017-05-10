@@ -16,8 +16,8 @@ export class Document extends ApiCollection {
   static collectionItemsUrl = "question_collection_items";
   static fields = ["id", "name", "created_at", "modified_at", "questions_link"];
 
-  static find(options: { page?: number }) {
-    return super._find(options);
+  static find(user: CurrentUser, options: { page?: number }) {
+    return super._find({ ...options, user: user.id });
   }
 
   static create(text: string) {

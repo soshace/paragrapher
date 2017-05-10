@@ -9,10 +9,10 @@ import {
 } from "../constants";
 import { Document, CurrentUser } from "../../models";
 
-export function readDocuments(options: { page?: number }) {
-  return { type: join(READ, DOCUMENTS), payload: Document.find(options) };
+export function readDocuments(user: CurrentUser, options: { page?: number }) {
+  return { type: join(READ, DOCUMENTS), payload: Document.find(user, options) };
 };
 
-export function createDocument(text: string, user: CurrentUser) {
-  return { type: join(SAVE, DOCUMENT), payload: Document.create(text, user) };
+export function createDocument(text: string) {
+  return { type: join(SAVE, DOCUMENT), payload: Document.create(text) };
 };

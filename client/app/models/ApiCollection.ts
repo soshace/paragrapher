@@ -35,7 +35,8 @@ export class ApiCollection {
   }
 
   static _find(options: { page?: number }) {
-    return axios.get(`${CONFIG.backendUri}/api/${this.baseUrl}/`, { params: { ...options, format: "json" } })
+    const query = { params: { ...options, format: "json" }, headers: CurrentUser.getAuthHeader() };
+    return axios.get(`${CONFIG.backendUri}/api/${this.baseUrl}/`, query)
     .then(({ data }: { data: any}) => {
       const pagesCount = data.count;
       const currentPage = data.previous_id || 1;
