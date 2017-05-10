@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Row, Col, FormGroup, FormControl, Button } from "react-bootstrap";
 
+import { Loading } from "../../../components";
 import { createDocument } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
 import { Document, CurrentUser } from "../../../models";
@@ -62,10 +63,10 @@ class NewDocument extends React.Component <Props, State> {
   renderMain() {
     const { loading } = this.props;
     if(loading) {
-      return "Saving...";
+      return (<Loading message="Saving..." />);
     }
     return (
-      <form>
+      <form className="new-document">
         <FormGroup
           controlId="newDocumentText"
           validationState={ this.getValidationState() }

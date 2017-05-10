@@ -1,5 +1,26 @@
-.documents-list {
+.documents {
   text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .documents__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .documents__list-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+  }
+
+  .documents__list {
+    flex: 1;
+  }
 
   .document {
     text-align: center;

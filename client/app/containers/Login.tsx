@@ -8,7 +8,7 @@ import { History } from "history";
 import { createBrowserHistory } from "history";
 import { Row, Col, FormControl, Button } from "react-bootstrap";
 
-import { FieldGroup } from "../components";
+import { FieldGroup, Loading } from "../components";
 import { readCurrentUser, login } from "../redux/actions";
 import { ReduxState } from "../redux/reducers";
 import { CurrentUser } from "../models";
@@ -74,7 +74,7 @@ class Login extends React.Component <Props, State> {
   renderMain() {
     const { loading, currentUser } = this.props;
     if(loading) {
-      return "Loading...";
+      return (<Loading message="Logging in..." />);
     }
     const { username, password, usernameTouched, passwordTouched } = this.state;
     return (

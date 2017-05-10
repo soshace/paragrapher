@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Row, Col, Pagination } from "react-bootstrap";
 
+import { Loading } from "../../../components";
 import { readDocuments } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
 import { Document, CurrentUser } from "../../../models";
@@ -29,9 +30,9 @@ class DocumentsList extends React.Component <Props, void> {
 
   render() {
     return (
-      <Row>
+      <Row className="documents">
         <NewDocument />
-        <Col xs={ 6 } xsOffset={ 3 } className="documents-list">
+        <Col xs={ 6 } xsOffset={ 3 } className="documents__main">
           { this.renderMain() }
         </Col>
       </Row>
@@ -39,27 +40,30 @@ class DocumentsList extends React.Component <Props, void> {
   }
 
   changePage = (eventKey: any) => {
-    this.props.readDocuments({ page: eventKey });
+    const { currentUser } = this.props;
+    this.props.readDocuments(currentUser, { page: eventKey });
   }
 
   renderMain() {
     const { loading, documents } = this.props;
     if(loading) {
-      return "Loading...";
+      return (<Loading message="Logging in..." />);
     }
     return (
-      <div className="documents-list" >
-        {
-          documents.map(function(document: Document) {
-            return (
-              <Row  key={ document.id } className="document" >
-                <Link to={ `/app/documents/${document.id}/paragraphs` }>
-                  { document.name }
-                </Link>
-              </Row>
-            );
-          })
-        }
+      <div className="documents__list-container">
+        <div className="documents__list">
+          {
+            documents.map(function(document: Document) {
+              return (
+                <Row  key={ document.id } className="document" >
+                  <Link to={ `/app/documents/${document.id}/paragraphs` }>
+                    { document.name }
+                  </Link>
+                </Row>
+              );
+            })
+          }
+        </div>
         { this.renderPager() }
       </div>
     );
