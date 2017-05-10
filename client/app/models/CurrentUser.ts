@@ -43,7 +43,6 @@ export class CurrentUser {
     console.log(config);
     return axios.get(`${CONFIG.backendUri}/auth/me/`, config)
     .then(function({ data }) {
-      console.log(data);
       return new CurrentUser(data);
     })
     .catch(function(err) {
