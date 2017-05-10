@@ -10,29 +10,32 @@ import {
   FAIL,
   join
 } from "../constants";
-import { Paragraph, Action } from "../../models";
+import { Paragraph, Action, Page } from "../../models";
 
-export interface State {
-  list: Paragraph[];
+export interface State extends Page<Paragraph> {
   loading: boolean;
 };
 
+
 export const defaultState: State = {
   list: [],
-  loading: true
+  loading: true,
+  pagesCount: 0,
+  currentPage: 0
 };
 
 const ACTION_HANDLERS = {
 
-  [join(READ, PARAGRAPHS, START)]: function(state: State, action: Action<Paragraph[]>): State {
-    return { loading: true, list: [] };
+  [join(READ, PARAGRAPHS, START)]: function(state: State): State {
+    return { ...state, loading: true, list: [] };
   },
 
-  [join(READ, PARAGRAPHS, SUCCESS)]: function(state: State, action: Action<Paragraph[]>): State {
-    const list = action.payload.map(function(paragraph) {
+  [join(READ, PARAGRAPHS, SUCCESS)]: function(state: State, action: Action<Page<Paragraph>>): State {
+    const { currentPage, pagesCount } = action.payload;
+    const list = action.payload.list.map(function(paragraph) {
       return paragraph.toJSON();
     });
-    return { loading: false, list };
+    return { loading: false, list, currentPage, pagesCount };
   },
 
   [join(READ, PARAGRAPHS, FAIL)]: function(state: State, action: Action<Error>): State {
@@ -47,12 +50,12 @@ const ACTION_HANDLERS = {
         return paragraph;
       }
     });
-    return { loading: false, list };
+    return { ...state, loading: false, list };
   }
 
 };
 
-export function paragraphsReducer(state: State = defaultState, action: Action<Paragraph[] | Error>): State {
+export function paragraphsReducer(state: State = defaultState, action: Action<Page<Paragraph> | Paragraph | Error>): State {
   const handler = ACTION_HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;

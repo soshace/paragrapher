@@ -6,6 +6,7 @@ import { Link, Route } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import * as Swipeable from "react-swipeable";
 
+import { Loading } from "../../../components";
 import { readParagraphs, changeLocation, toggleParagraphLike } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
 import { Paragraph } from "../../../models";
@@ -91,7 +92,7 @@ class ParagraphsList extends React.Component <Props, void> {
     const { documentId } = this.props.match.params;
     const { loading, paragraphs } = this.props;
     if(loading) {
-      return "Loading...";
+      return (<Loading message="Logging in..." />);
     }
     return (
       <Row className="paragraphs-list">
@@ -102,7 +103,7 @@ class ParagraphsList extends React.Component <Props, void> {
         </Col>
         <Col xs={ 6 }>
           {
-            paragraphs.map((paragraph, i) => {
+            paragraphs.map((paragraph: Paragraph, i) => {
               return (
                 <Row key={ paragraph.id } className="paragraph-wrapper">
                   <div
@@ -116,7 +117,7 @@ class ParagraphsList extends React.Component <Props, void> {
                       to={ `/app/documents/${documentId}/paragraphs#${paragraph.id}` }
                     >
                       <Swipeable onSwiped={ (e: any, deltaX: number) => this.swipe(paragraph, deltaX) } >
-                        { paragraph.text }
+                        { paragraph.question }
                       </Swipeable>
                     </Link>
                   </div>

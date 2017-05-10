@@ -17,7 +17,6 @@ schema.statics.createDocument = function(text) {
   const title = text.substr(0, 50);
   const document = new Document({ title });
   const Paragraph = mongoose.model("Paragraph");
-  console.log(text.split(/[\n\r]{2,}/g));
   return document.save()
   .then(function() {
     return Promise.all(text.split(/[\n\r]{2,}/g).map(function(paragraphText) {

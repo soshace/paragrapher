@@ -6,5 +6,6 @@
     "host": "ds029381.mlab.com",
     "port": "29381",
     "name": "heroku_4k1hg3gs"
-  }
+  },
+  "backendUri": "https://api.represent.me"
 }

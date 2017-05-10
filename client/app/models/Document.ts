@@ -3,38 +3,57 @@
 import { pick } from "underscore";
 import axios from "axios";
 
-import { ApiCollection } from "./";
+import { ApiCollection, Params as ApiCollectionParams, CurrentUser, Paragraph } from "./";
 
-interface Params {
-  _id?: string;
-  id?: string;
-  title: string;
-  createdAt: Date;
-  updatedAt: Date;
+interface Params extends ApiCollectionParams {
+  name: string;
+  questions_link: string;
 }
 
 export class Document extends ApiCollection {
 
-  static fields = ["id", "title", "createdAt", "updatedAt"];
+  static baseUrl = "question_collections";
+  static collectionItemsUrl = "question_collection_items";
+  static fields = ["id", "name", "created_at", "modified_at", "questions_link"];
 
-  static find(options: { limit?: number; offset?: number }) {
-    return super.find("documents", options);
+  static find(user: CurrentUser, options: { page?: number }) {
+    return super._find({ ...options, user: user.id });
   }
 
   static create(text: string) {
-    return axios.post("/api/documents", { text })
-    .then(({ data }: { data: Params}) => {
-      return new Document(data);
+    const paragraphTexts = text.split(/[\n\r]{2,}/g);
+    const name = text.substr(0, 50);
+    const body = { name, question_count: paragraphTexts.length };
+    let document: Document;
+    return super.create(body)
+    .then((_document: Document) => {
+      document = _document;
+      const promises = paragraphTexts.map(function(paragraphText) {
+        return Paragraph.create(paragraphText.trim());
+      });
+      return Promise.all(promises);
+    })
+    .then(function(paragraphs: Paragraph[]) {
+      const promises = paragraphs.map(function(paragraph) {
+        const config = { headers: CurrentUser.getAuthHeader() };
+        const content_object: any = null;
+        const item = { parent: document.id, content_object, type: "Q", object_id: paragraph.id };
+        return axios.post(`${CONFIG.backendUri}/api/${Document.collectionItemsUrl}/`, item, config);
+      });
+      return Promise.all(promises);
+    })
+    .then(function() {
+      return document;
     });
   }
 
-  id: string;
-  title: string;
+  name: string;
+  questions_link: string;
 
   constructor(params: Params) {
     super(params);
-    this.id = params._id || params.id;
-    this.title = params.title;
+    this.name = params.name;
+    this.questions_link = params.questions_link;
   }
 
 };

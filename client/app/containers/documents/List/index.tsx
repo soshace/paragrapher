@@ -3,61 +3,98 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Pagination } from "react-bootstrap";
 
+import { Loading } from "../../../components";
 import { readDocuments } from "../../../redux/actions";
 import { ReduxState } from "../../../redux/reducers";
-import { Document } from "../../../models";
+import { Document, CurrentUser } from "../../../models";
 import { NewDocument } from "../";
 import "./style.less";
 
 interface Props {
-  readDocuments({ offset, limit }: { offset?: number; limit?: number; }): void;
+  readDocuments(user: CurrentUser, options: { page?: number }): void;
   documents: Document[];
   loading: boolean;
+  currentPage: number;
+  pagesCount: number;
+  currentUser: CurrentUser;
 }
 
 class DocumentsList extends React.Component <Props, void> {
 
   componentDidMount() {
-    this.props.readDocuments({});
+    const { currentUser } = this.props;
+    this.props.readDocuments(currentUser, {});
   }
 
   render() {
     return (
-      <Row>
+      <Row className="documents">
         <NewDocument />
-        { this.renderMain() }
+        <Col xs={ 6 } xsOffset={ 3 } className="documents__main">
+          { this.renderMain() }
+        </Col>
       </Row>
     );
+  }
+
+  changePage = (eventKey: any) => {
+    const { currentUser } = this.props;
+    this.props.readDocuments(currentUser, { page: eventKey });
   }
 
   renderMain() {
     const { loading, documents } = this.props;
     if(loading) {
-      return "Loading...";
+      return (<Loading message="Logging in..." />);
     }
     return (
-      <Col xs={ 6 } xsOffset={ 3 }>
-        {
-          documents.map(function(document) {
-            return (
-              <Row  key={ document.id } className="document" >
-                <Link to={ `/app/documents/${document.id}/paragraphs` }>
-                  { document.title }
-                </Link>
-              </Row>
-            );
-          })
-        }
-      </Col>
+      <div className="documents__list-container">
+        <div className="documents__list">
+          {
+            documents.map(function(document: Document) {
+              return (
+                <Row  key={ document.id } className="document" >
+                  <Link to={ `/app/documents/${document.id}/paragraphs` }>
+                    { document.name }
+                  </Link>
+                </Row>
+              );
+            })
+          }
+        </div>
+        { this.renderPager() }
+      </div>
+    );
+  }
+
+  renderPager() {
+    const { pagesCount, currentPage } = this.props;
+    if(!(pagesCount > 0)) {
+      return (<div></div>);
+    }
+    return (
+      <Pagination
+        prev
+        next
+        first
+        last
+        ellipsis
+        boundaryLinks
+        items={ pagesCount }
+        maxButtons={ 5 }
+        activePage={ currentPage }
+        onSelect={ this.changePage }
+      />
     );
   }
 
 }
 
-function mapStateToProps({ documents }: ReduxState) {
-  const { list, loading } = documents;
-  return { documents: list, loading };
+function mapStateToProps({ documents, currentUser }: ReduxState) {
+  const { list, loading, currentPage, pagesCount } = documents;
+  const { profile } = currentUser;
+  return { documents: list, loading, currentPage, pagesCount, currentUser: profile };
 }
 export default connect(mapStateToProps, { readDocuments })(DocumentsList);
