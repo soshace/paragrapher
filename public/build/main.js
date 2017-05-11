@@ -16085,7 +16085,7 @@ var ApiCollection = function () {
             var _this = this;
 
             var config = { headers: _1.CurrentUser.getAuthHeader() };
-            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + this.baseUrl + "/", body, config).then(function (_ref) {
+            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + this.baseUrl + "/", body, config).then(function (_ref) {
                 var data = _ref.data;
 
                 return new _this.prototype.constructor(data);
@@ -16097,7 +16097,7 @@ var ApiCollection = function () {
             var _this2 = this;
 
             var query = { params: Object.assign({}, options, { format: "json" }), headers: _1.CurrentUser.getAuthHeader() };
-            return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + this.baseUrl + "/", query).then(function (_ref2) {
+            return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + this.baseUrl + "/", query).then(function (_ref2) {
                 var data = _ref2.data;
 
                 var nextPage = data.next_id;
@@ -16162,7 +16162,7 @@ var CurrentUser = function () {
     }], [{
         key: "register",
         value: function register(username, password, email) {
-            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/auth/register/", { username: username, password: password, email: email }).then(function (_ref) {
+            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/auth/register/", { username: username, password: password, email: email }).then(function (_ref) {
                 var data = _ref.data;
 
                 return new CurrentUser(data);
@@ -16171,7 +16171,7 @@ var CurrentUser = function () {
     }, {
         key: "login",
         value: function login(username, password) {
-            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/auth/login/", { username: username, password: password }).then(function (_ref2) {
+            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/auth/login/", { username: username, password: password }).then(function (_ref2) {
                 var data = _ref2.data;
 
                 localStorage.setItem("auth_token", data.auth_token);
@@ -16183,7 +16183,7 @@ var CurrentUser = function () {
         value: function get() {
             var config = { headers: CurrentUser.getAuthHeader() };
             console.log(config);
-            return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/auth/me/", config).then(function (_ref3) {
+            return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/auth/me/", config).then(function (_ref3) {
                 var data = _ref3.data;
 
                 return new CurrentUser(data);
@@ -16271,7 +16271,7 @@ var Document = function (_$ApiCollection) {
                     var config = { headers: _1.CurrentUser.getAuthHeader() };
                     var content_object = null;
                     var item = { parent: document.id, content_object: content_object, type: "Q", object_id: paragraph.id };
-                    return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + Document.collectionItemsUrl + "/", item, config);
+                    return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + Document.collectionItemsUrl + "/", item, config);
                 });
                 return Promise.all(promises);
             }).then(function () {
@@ -16338,7 +16338,7 @@ var Paragraph = function (_$ApiCollection) {
             if (this.my_vote.length > 0) {
                 return;
             }
-            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + Paragraph.votesUrl + "/", body, config).then(function (_ref) {
+            return axios_1.default.post({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + Paragraph.votesUrl + "/", body, config).then(function (_ref) {
                 var data = _ref.data;
 
                 _this2.score += like ? 1 : -1;
@@ -16354,7 +16354,7 @@ var Paragraph = function (_$ApiCollection) {
             if (typeof page == "number") {
                 params.page = page;
             }
-            return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me/api","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + Paragraph.votesUrl + "/", { params: params }).then(function (_ref2) {
+            return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://testv2.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + Paragraph.votesUrl + "/", { params: params }).then(function (_ref2) {
                 var data = _ref2.data;
 
                 _this3.score = data.results.reduce(function (currentValue, vote) {
