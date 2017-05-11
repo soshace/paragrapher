@@ -38,12 +38,13 @@ export class ApiCollection {
     const query = { params: { ...options, format: "json" }, headers: CurrentUser.getAuthHeader() };
     return axios.get(`${CONFIG.backendUri}/api/${this.baseUrl}/`, query)
     .then(({ data }: { data: any}) => {
-      const pagesCount = data.count;
-      const currentPage = data.previous_id || 1;
+      const nextPage = data.next_id;
+      const previousPage = data.previous_id;
       const list = data.results.map((instance: any) => {
         return new (<typeof ApiCollection>this.prototype.constructor)(instance);
       });
-      return { currentPage, pagesCount, list };
+
+      return { nextPage, previousPage, list };
     });
   }
 

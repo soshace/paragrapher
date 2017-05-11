@@ -2,6 +2,6 @@
 
 export interface Page<T> {
   list: T[];
-  currentPage: number;
-  pagesCount: number;
+  previousPage: number;
+  nextPage: number;
 }

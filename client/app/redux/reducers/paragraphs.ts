@@ -20,8 +20,8 @@ export interface State extends Page<Paragraph> {
 export const defaultState: State = {
   list: [],
   loading: true,
-  pagesCount: 0,
-  currentPage: 0
+  previousPage: null,
+  nextPage: null
 };
 
 const ACTION_HANDLERS = {
@@ -31,11 +31,11 @@ const ACTION_HANDLERS = {
   },
 
   [join(READ, PARAGRAPHS, SUCCESS)]: function(state: State, action: Action<Page<Paragraph>>): State {
-    const { currentPage, pagesCount } = action.payload;
+    const { nextPage, previousPage } = action.payload;
     const list = action.payload.list.map(function(paragraph) {
       return paragraph.toJSON();
     });
-    return { loading: false, list, currentPage, pagesCount };
+    return { loading: false, list, nextPage, previousPage };
   },
 
   [join(READ, PARAGRAPHS, FAIL)]: function(state: State, action: Action<Error>): State {

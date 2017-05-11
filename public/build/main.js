@@ -15635,7 +15635,7 @@ var Register = function (_React$Component) {
                 currentUser = _props.currentUser;
 
             if (loading) {
-                return React.createElement(components_1.Loading, { message: "Logging in..." });
+                return React.createElement(components_1.Loading, { message: "Loading user..." });
             }
             var _state = this.state,
                 username = _state.username,
@@ -15774,7 +15774,7 @@ var DocumentsList = function (_React$Component) {
                 documents = _props.documents;
 
             if (loading) {
-                return React.createElement(components_1.Loading, { message: "Logging in..." });
+                return React.createElement(components_1.Loading, { message: "Loading documents..." });
             }
             return React.createElement("div", { className: "documents__list-container" }, React.createElement("div", { className: "documents__list" }, documents.map(function (document) {
                 return React.createElement(react_bootstrap_1.Row, { key: document.id, className: "document" }, React.createElement(react_router_dom_1.Link, { to: "/app/documents/" + document.id + "/paragraphs" }, document.name));
@@ -15784,13 +15784,15 @@ var DocumentsList = function (_React$Component) {
         key: "renderPager",
         value: function renderPager() {
             var _props2 = this.props,
-                pagesCount = _props2.pagesCount,
-                currentPage = _props2.currentPage;
+                nextPage = _props2.nextPage,
+                previousPage = _props2.previousPage;
 
-            if (!(pagesCount > 0)) {
+            if (!nextPage && !previousPage) {
                 return React.createElement("div", null);
             }
-            return React.createElement(react_bootstrap_1.Pagination, { prev: true, next: true, first: true, last: true, ellipsis: true, boundaryLinks: true, items: pagesCount, maxButtons: 5, activePage: currentPage, onSelect: this.changePage });
+            var activePage = nextPage ? nextPage - 1 : previousPage + 1;
+            var maxButtons = nextPage ? nextPage : activePage;
+            return React.createElement(react_bootstrap_1.Pagination, { prev: true, next: true, first: true, last: true, ellipsis: true, boundaryLinks: true, items: nextPage, maxButtons: maxButtons, activePage: activePage, onSelect: this.changePage });
         }
     }]);
 
@@ -15802,11 +15804,11 @@ function mapStateToProps(_ref) {
         currentUser = _ref.currentUser;
     var list = documents.list,
         loading = documents.loading,
-        currentPage = documents.currentPage,
-        pagesCount = documents.pagesCount;
+        previousPage = documents.previousPage,
+        nextPage = documents.nextPage;
     var profile = currentUser.profile;
 
-    return { documents: list, loading: loading, currentPage: currentPage, pagesCount: pagesCount, currentUser: profile };
+    return { documents: list, loading: loading, previousPage: previousPage, nextPage: nextPage, currentUser: profile };
 }
 exports.default = react_redux_1.connect(mapStateToProps, { readDocuments: actions_1.readDocuments })(DocumentsList);
 
@@ -16005,7 +16007,7 @@ var ParagraphsList = function (_React$Component) {
                 paragraphs = _props.paragraphs;
 
             if (loading) {
-                return React.createElement(components_1.Loading, { message: "Logging in..." });
+                return React.createElement(components_1.Loading, { message: "Loading paragraphs..." });
             }
             return React.createElement(react_bootstrap_1.Row, { className: "paragraphs-list" }, React.createElement(react_bootstrap_1.Col, { xs: 3 }, React.createElement(react_router_dom_1.Link, { to: "/app/documents" }, "Back to documents")), React.createElement(react_bootstrap_1.Col, { xs: 6 }, paragraphs.map(function (paragraph, i) {
                 return React.createElement(react_bootstrap_1.Row, { key: paragraph.id, className: "paragraph-wrapper" }, React.createElement("div", { tabIndex: i, id: paragraph.id, onKeyDown: _this2.onKeyDown.bind(_this2, i), ref: function ref(row) {
@@ -16098,12 +16100,12 @@ var ApiCollection = function () {
             return axios_1.default.get({"PORT":3000,"database":{"user":"heroku_4k1hg3gs","password":"kchms7l5us5chg2mth87lmpgln","host":"ds029381.mlab.com","port":"29381","name":"heroku_4k1hg3gs"},"backendUri":"https://api.represent.me","webpack":{"outputUrl":"/build/","outputPath":"public/build"}}.backendUri + "/api/" + this.baseUrl + "/", query).then(function (_ref2) {
                 var data = _ref2.data;
 
-                var pagesCount = data.count;
-                var currentPage = data.previous_id || 1;
+                var nextPage = data.next_id;
+                var previousPage = data.previous_id;
                 var list = data.results.map(function (instance) {
                     return new _this2.prototype.constructor(instance);
                 });
-                return { currentPage: currentPage, pagesCount: pagesCount, list: list };
+                return { nextPage: nextPage, previousPage: previousPage, list: list };
             });
         }
     }]);
@@ -16601,7 +16603,8 @@ var constants_1 = __webpack_require__(49);
 ;
 exports.defaultState = {
     list: [],
-    pagesCount: 0,
+    nextPage: null,
+    previousPage: null,
     loading: true,
     form: {
         saving: false
@@ -16611,17 +16614,17 @@ var ACTION_HANDLERS = (_ACTION_HANDLERS = {}, _defineProperty(_ACTION_HANDLERS, 
     return Object.assign({}, state, { loading: true, error: null, list: [] });
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.READ, constants_1.DOCUMENTS, constants_1.SUCCESS), function (state, action) {
     var _action$payload = action.payload,
-        pagesCount = _action$payload.pagesCount,
-        currentPage = _action$payload.currentPage;
+        nextPage = _action$payload.nextPage,
+        previousPage = _action$payload.previousPage;
 
     var list = action.payload.list.map(function (document) {
         return document.toJSON();
     }).sort(function (documentA, documentB) {
         return documentA.created_at < documentB.created_at ? 1 : -1;
     });
-    return Object.assign({}, state, { loading: false, list: list, currentPage: currentPage, pagesCount: pagesCount });
+    return Object.assign({}, state, { loading: false, list: list, previousPage: previousPage, nextPage: nextPage });
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.READ, constants_1.DOCUMENTS, constants_1.FAIL), function (state, action) {
-    return Object.assign({}, state, { loading: false, pagesCount: 0, list: [] });
+    return Object.assign({}, state, { loading: false, nextPage: 0, list: [] });
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.SAVE, constants_1.DOCUMENT, constants_1.START), function (state) {
     return Object.assign({}, state, { form: { saving: true } });
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.SAVE, constants_1.DOCUMENT, constants_1.SUCCESS), function (state, action) {
@@ -16704,20 +16707,20 @@ var constants_1 = __webpack_require__(49);
 exports.defaultState = {
     list: [],
     loading: true,
-    pagesCount: 0,
-    currentPage: 0
+    previousPage: null,
+    nextPage: null
 };
 var ACTION_HANDLERS = (_ACTION_HANDLERS = {}, _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.READ, constants_1.PARAGRAPHS, constants_1.START), function (state) {
     return Object.assign({}, state, { loading: true, list: [] });
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.READ, constants_1.PARAGRAPHS, constants_1.SUCCESS), function (state, action) {
     var _action$payload = action.payload,
-        currentPage = _action$payload.currentPage,
-        pagesCount = _action$payload.pagesCount;
+        nextPage = _action$payload.nextPage,
+        previousPage = _action$payload.previousPage;
 
     var list = action.payload.list.map(function (paragraph) {
         return paragraph.toJSON();
     });
-    return { loading: false, list: list, currentPage: currentPage, pagesCount: pagesCount };
+    return { loading: false, list: list, nextPage: nextPage, previousPage: previousPage };
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.READ, constants_1.PARAGRAPHS, constants_1.FAIL), function (state, action) {
     return Object.assign({}, state, { loading: false });
 }), _defineProperty(_ACTION_HANDLERS, constants_1.join(constants_1.SAVE, constants_1.PARAGRAPH, constants_1.SUCCESS), function (state, action) {

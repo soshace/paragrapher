@@ -92,7 +92,7 @@ class ParagraphsList extends React.Component <Props, void> {
     const { documentId } = this.props.match.params;
     const { loading, paragraphs } = this.props;
     if(loading) {
-      return (<Loading message="Logging in..." />);
+      return (<Loading message="Loading paragraphs..." />);
     }
     return (
       <Row className="paragraphs-list">

@@ -16,8 +16,8 @@ interface Props {
   readDocuments(user: CurrentUser, options: { page?: number }): void;
   documents: Document[];
   loading: boolean;
-  currentPage: number;
-  pagesCount: number;
+  previousPage: number;
+  nextPage: number;
   currentUser: CurrentUser;
 }
 
@@ -47,7 +47,7 @@ class DocumentsList extends React.Component <Props, void> {
   renderMain() {
     const { loading, documents } = this.props;
     if(loading) {
-      return (<Loading message="Logging in..." />);
+      return (<Loading message="Loading documents..." />);
     }
     return (
       <div className="documents__list-container">
@@ -70,10 +70,12 @@ class DocumentsList extends React.Component <Props, void> {
   }
 
   renderPager() {
-    const { pagesCount, currentPage } = this.props;
-    if(!(pagesCount > 0)) {
+    const { nextPage, previousPage } = this.props;
+    if(!nextPage && !previousPage) {
       return (<div></div>);
     }
+    const activePage = nextPage ? nextPage - 1 : previousPage + 1;
+    const maxButtons = nextPage ? nextPage : activePage;
     return (
       <Pagination
         prev
@@ -82,9 +84,9 @@ class DocumentsList extends React.Component <Props, void> {
         last
         ellipsis
         boundaryLinks
-        items={ pagesCount }
-        maxButtons={ 5 }
-        activePage={ currentPage }
+        items={ nextPage }
+        maxButtons={ maxButtons }
+        activePage={ activePage }
         onSelect={ this.changePage }
       />
     );
@@ -93,8 +95,8 @@ class DocumentsList extends React.Component <Props, void> {
 }
 
 function mapStateToProps({ documents, currentUser }: ReduxState) {
-  const { list, loading, currentPage, pagesCount } = documents;
+  const { list, loading, previousPage, nextPage } = documents;
   const { profile } = currentUser;
-  return { documents: list, loading, currentPage, pagesCount, currentUser: profile };
+  return { documents: list, loading, previousPage, nextPage, currentUser: profile };
 }
 export default connect(mapStateToProps, { readDocuments })(DocumentsList);

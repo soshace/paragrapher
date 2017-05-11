@@ -14,8 +14,8 @@ import {  Document, Action } from "../../models";
 
 export interface State {
   list: Document[];
-  pagesCount: number;
-  currentPage?: number;
+  nextPage: number;
+  previousPage: number;
   loading: boolean;
   error?: Error;
   form: {
@@ -25,7 +25,8 @@ export interface State {
 
 export const defaultState: State = {
   list: [],
-  pagesCount: 0,
+  nextPage: null,
+  previousPage: null,
   loading: true,
   form: {
     saving: false
@@ -34,8 +35,8 @@ export const defaultState: State = {
 
 interface Page {
   list: Document[];
-  currentPage: number;
-  pagesCount: number;
+  previousPage: number;
+  nextPage: number;
 }
 
 const ACTION_HANDLERS = {
@@ -45,18 +46,18 @@ const ACTION_HANDLERS = {
   },
 
   [join(READ, DOCUMENTS, SUCCESS)]: function(state: State, action: Action<Page>): State {
-    const { pagesCount, currentPage } = action.payload;
+    const { nextPage, previousPage } = action.payload;
     const list: Document[] = action.payload.list.map(function(document) {
       return document.toJSON();
     })
     .sort(function(documentA, documentB) {
       return documentA.created_at < documentB.created_at ? 1 : -1;
     });
-    return { ...state, loading: false, list, currentPage, pagesCount };
+    return { ...state, loading: false, list, previousPage, nextPage };
   },
 
   [join(READ, DOCUMENTS, FAIL)]: function(state: State, action: Action<Error>): State {
-    return { ...state, loading: false, pagesCount: 0, list: [] };
+    return { ...state, loading: false, nextPage: 0, list: [] };
   },
 
   [join(SAVE, DOCUMENT, START)]: function(state: State): State {

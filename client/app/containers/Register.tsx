@@ -72,7 +72,7 @@ class Register extends React.Component <Props, State> {
   renderMain() {
     const { loading, currentUser } = this.props;
     if(loading) {
-      return (<Loading message="Logging in..." />);
+      return (<Loading message="Loading user..." />);
     }
     const { username, password, email, usernameTouched, passwordTouched, emailTouched } = this.state;
     return (
