@@ -7,5 +7,5 @@
     "port": "29381",
     "name": "heroku_4k1hg3gs"
   },
-  "backendUri": "https://api.represent.me"
+  "backendUri": "https://testv2.represent.me/api"
 }
